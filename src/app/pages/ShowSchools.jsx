@@ -7,20 +7,22 @@ function ShowSchools() {
   const [data, setData] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedSchool, setSelectedSchool] = useState(null);
+  const[Loading,setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
         const response = await fetch('https://edunify.onrender.com/api/v1/getSchool', {
           method: 'GET',
         });
-
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
 
         const result = await response.json();
         setData(result.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -42,6 +44,9 @@ function ShowSchools() {
           Add School Data
         </button>
       </Link>
+      {
+        Loading ? <h1 className="text-3xl font-bold text-center my-4">Api is Live on Render It may Take Sometime to load Pls Wait ....</h1> : null
+      }
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((school) => (
           <div key={school.id} className="flex flex-col bg-white p-4 rounded shadow text-black">
